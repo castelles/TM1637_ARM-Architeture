@@ -1,0 +1,24 @@
+core_cm0plus.h:745:22:void NVIC_EnableIRQ(IRQn_Type)	16	static
+core_cm0plus.h:756:22:void NVIC_DisableIRQ(IRQn_Type)	16	static
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+std_function.h:252:5:std::_Function_base::_Function_base()	16	static
+Callback.h:13:7:Callback::Callback()	16	static
+mkl_DevGPIO.cpp:61:1:mkl_DevGPIO::mkl_DevGPIO()	16	static
+mkl_DevGPIO.cpp:65:1:mkl_DevGPIO::mkl_DevGPIO(gpio_Pin)	32	static
+mkl_DevGPIO.cpp:92:6:void mkl_DevGPIO::setPortMode(gpio_PortMode)	16	static
+mkl_DevGPIO.cpp:116:6:void mkl_DevGPIO::setPullResistor(gpio_PullResistor)	16	static
+mkl_DevGPIO.cpp:134:6:void mkl_DevGPIO::writeBit(int)	16	static
+mkl_DevGPIO.cpp:142:20:const mkl_DevGPIO& mkl_DevGPIO::operator=(int)	16	static
+mkl_DevGPIO.cpp:158:5:int mkl_DevGPIO::readBit()	16	static
+mkl_DevGPIO.cpp:176:6:void mkl_DevGPIO::toogleBit()	16	static
+mkl_DevGPIO.cpp:186:6:void mkl_DevGPIO::getInterruptFlag()	16	static
+mkl_DevGPIO.cpp:196:6:void mkl_DevGPIO::clearInterruptFlag()	16	static
+mkl_DevGPIO.cpp:206:6:bool mkl_DevGPIO::thisGpioTriggedIntr()	16	static
+mkl_DevGPIO.cpp:217:6:void mkl_DevGPIO::enableInterrupt(gpio_InterruptTrigger)	16	static
+mkl_DevGPIO.cpp:236:6:void mkl_DevGPIO::disableInterrupt()	16	static
+mkl_DevGPIO.cpp:259:6:void mkl_DevGPIO::bindPeripheral(uint8_t, uint8_t)	24	static
+mkl_DevGPIO.cpp:321:6:void mkl_DevGPIO::enableModuleClock(uint8_t)	16	static
+mkl_DevGPIO.cpp:337:6:void mkl_DevGPIO::selectMuxAlternative()	16	static
+mkl_DevGPIO.cpp:351:6:void mkl_DevGPIO::setGPIOParameters(gpio_Pin, uint32_t&, uint32_t&)	24	static
+mkl_DevGPIO.cpp:358:6:void mkl_DevGPIO::runInterruptFunction()	16	static
+std_function.h:395:7:)>::function() [with _Res = void; _ArgTypes = {}]	16	static

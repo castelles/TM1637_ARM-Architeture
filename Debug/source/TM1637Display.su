@@ -1,0 +1,32 @@
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+std_function.h:252:5:std::_Function_base::_Function_base()	16	static
+std_function.h:254:5:std::_Function_base::~_Function_base()	16	static
+std_function.h:260:10:bool std::_Function_base::_M_empty() const	16	static
+std_function.h:370:11:std::function<void()>::~function()	16	static
+Callback.h:13:7:Callback& Callback::operator=(const Callback&)	16	static
+mkl_DevGPIO.h:136:7:mkl_DevGPIO& mkl_DevGPIO::operator=(const mkl_DevGPIO&)	16	static
+TM1637Display.cpp:61:1:TM1637Display::TM1637Display(mkl_DevGPIO, mkl_DevGPIO, unsigned int)	24	static
+TM1637Display.cpp:76:6:void TM1637Display::setBrightness(uint8_t, bool)	16	static
+TM1637Display.cpp:81:6:void TM1637Display::setSegments(const uint8_t*, uint8_t, uint8_t)	40	static
+TM1637Display.cpp:104:6:void TM1637Display::clear()	24	static
+TM1637Display.cpp:110:6:void TM1637Display::showNumberDec(int, bool, uint8_t, uint8_t)	32	static
+TM1637Display.cpp:115:6:void TM1637Display::showNumberDecEx(int, uint8_t, bool, uint8_t, uint8_t)	48	static
+TM1637Display.cpp:121:6:void TM1637Display::showNumberHexEx(uint16_t, uint8_t, bool, uint8_t, uint8_t)	40	static
+TM1637Display.cpp:127:6:void TM1637Display::showNumberBaseEx(int8_t, uint16_t, uint8_t, bool, uint8_t, uint8_t)	40	static
+TM1637Display.cpp:179:6:void TM1637Display::delayMs(unsigned int)	24	static
+TM1637Display.cpp:188:6:void TM1637Display::bitDelay()	16	static
+TM1637Display.cpp:193:6:void TM1637Display::start()	16	static
+TM1637Display.cpp:199:6:void TM1637Display::stop()	16	static
+TM1637Display.cpp:209:6:bool TM1637Display::writeByte(uint8_t)	24	static
+TM1637Display.cpp:254:6:void TM1637Display::showDots(uint8_t, uint8_t*)	40	static
+TM1637Display.cpp:263:9:uint8_t TM1637Display::encodeDigit(uint8_t)	16	static
+std_function.h:461:7:)>&) [with _Res = void; _ArgTypes = {}]	40	static
+std_function.h:652:5:)>&) [with _Res = void; _ArgTypes = {}]	16	static
+std_function.h:546:12:)>&) [with _Res = void; _ArgTypes = {}]	16	static
+std_function.h:563:16:)>::operator bool() const [with _Res = void; _ArgTypes = {}]	16	static
+move.h:99:5:constexpr typename std::remove_reference<_Tp>::type&& std::move(_Tp&&) [with _Tp = std::_Any_data&]	16	static
+move.h:182:5:typename std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> >::value>::type std::swap(_Tp&, _Tp&) [with _Tp = std::_Any_data]	32	static
+move.h:99:5:constexpr typename std::remove_reference<_Tp>::type&& std::move(_Tp&&) [with _Tp = bool (*&)(std::_Any_data&, const std::_Any_data&, std::_Manager_operation)]	16	static
+move.h:182:5:typename std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> >::value>::type std::swap(_Tp&, _Tp&) [with _Tp = bool (*)(std::_Any_data&, const std::_Any_data&, std::_Manager_operation)]	24	static
+move.h:99:5:constexpr typename std::remove_reference<_Tp>::type&& std::move(_Tp&&) [with _Tp = void (*&)(const std::_Any_data&)]	16	static
+move.h:182:5:typename std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<_Tp> >, std::is_move_constructible<_Tp>, std::is_move_assignable<_Tp> >::value>::type std::swap(_Tp&, _Tp&) [with _Tp = void (*)(const std::_Any_data&)]	24	static

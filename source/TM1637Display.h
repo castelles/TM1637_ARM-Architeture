@@ -1,18 +1,47 @@
-//  Author: avishorp@gmail.com
-//
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+/*!
+ * @copyright   � 2020 Caio Arthur Sales Telles <csalestelles@gmail.com>
+ *
+ * @brief       Exemplo de uso do periférico TM1637 na MKL25Z.
+ *
+ * @file        mkl_TM1637.h
+ * @version     1.0
+ * @date        21 de janeiro de 2020
+ *
+ * @section     HARDWARES & SOFTWARES
+ *              +board        FRDM-KL25Z da NXP.
+ *              +processor    MKL25Z128VLK4 - ARM Cortex-M0+.
+ *              +peripheral   Display TM1637.
+ *              +compiler     MCUXpresso IDE
+ *              +manual       L25P80M48SF0RM, Rev.3, September 2012
+ *              +revisions    Versão(data): Descrição breve.
+ *                             ++ 1.0 (26 de janeiro de 2020): Versão inicial.
+ *
+ * @section     AUTHORS & DEVELOPERS
+ *              +institution  Universidade Federal do Amazonas
+ *              +courses      Engenharia da Computação/ Engenharia Elétrica
+ *              +teacher      Miguel Grimm <miguelgrimm@gmail.com>
+ *              +student      Versão inicial:
+ *                             ++ Caio Arthur Sales Telles <csalestelles@gmail.com>
+ *
+ * @section     LICENSE
+ *
+ *              GNU General Public License (GNU GPL).
+ *
+ *              Este programa é um software livre; Você pode redistribuí-lo
+ *              e/ou modificá-lo de acordo com os termos do "GNU General Public
+ *              License" como publicado pela Free Software Foundation; Seja a
+ *              versão da licença, ou qualquer vers�o posterior.
+ *
+ *              Este programa é distribuído na esperança de que seja útil,
+ *              mas SEM QUALQUER GARANTIA; Sem a garantia implícita de
+ *              COMERCIALIZAÇÃO OU USO PARA UM DETERMINADO PROPÓSITO.
+ *              Veja o site da "GNU General Public License" para mais detalhes.
+ *
+ *              Para mais informações ou dúvidas sobre o funcionamento do periférico
+ *              TM1637 e/ou o código abaixo, entrar em contato com Caio Arthur.
+ *
+ * @htmlonly    http://www.gnu.org/copyleft/gpl.html
+ */
 
 #ifndef __TM1637DISPLAY__
 #define __TM1637DISPLAY__
@@ -31,118 +60,152 @@
 
 #define DEFAULT_BIT_DELAY  2
 
+/*!
+ *  @class    mkl_TM1637.
+ *
+ *  @brief    A classe implementa o serviço de exibição
+ *  	 	  do display TM1637.
+ *
+ *  @details  Esta classe implementa o serviço de exibiçãodo display utilizando o
+ *            periférico correspondente.
+ *
+ *  @section  EXAMPLES USAGE
+ *
+ *            Uso dos métodos para exibição de dados no display.
+ *
+ *              display.showNumberDec(24, false, 1, 0);
+ *              display.setSegments(segments[], 2, 2);
+ */
+
 class TM1637Display {
 
 public:
-  //! Initialize a TM1637Display object, setting the clock and
-  //! data pins.
-  //!
-  //! @param pinClk - The number of the digital pin connected to the clock pin of the module
-  //! @param pinDIO - The number of the digital pin connected to the DIO pin of the module
-  //! @param bitDelay - The delay, in microseconds, between bit transition on the serial
-  //!                   bus connected to the display
+/*!
+ * 	Inicializa um objeto TM1637Display, defininfo os pinos
+ * 	de clock e dados
+ *
+ *  @param pinClk - O valor do pino conectado ao pino de clock do periférico
+ *  @param pinDIO - O valor do pino conectado ao pino DIO do módulo
+ *  @param bitDelay - O delay em milissegundos entre a transição de bit no buffer conectado ao display
+ *
+ */
   TM1637Display(mkl_DevGPIO pinClk, mkl_DevGPIO pinDIO, unsigned int bitDelay = DEFAULT_BIT_DELAY);
-
-  //! Sets the brightness of the display.
-  //!
-  //! The setting takes effect when a command is given to change the data being
-  //! displayed.
-  //!
-  //! @param brightness A number from 0 (lowes brightness) to 7 (highest brightness)
-  //! @param on Turn display on or off
+/*!
+ * 	Define o nível do brilho do display
+ *
+ * 	A nova definição de brilho surte efeito quando um comando para a mudança dos dados exibidos
+ *
+ * 	@param brightness Um valor de 0 (menos brilho) a 7 (mais brilho)
+ * 	@param on Liga ou desliga o display
+ */
   void setBrightness(uint8_t brightness, bool on = true);
 
-  //! Display arbitrary data on the module
-  //!
-  //! This function receives raw segment values as input and displays them. The segment data
-  //! is given as a byte array, each byte corresponding to a single digit. Within each byte,
-  //! bit 0 is segment A, bit 1 is segment B etc.
-  //! The function may either set the entire display or any desirable part on its own. The first
-  //! digit is given by the @ref pos argument with 0 being the leftmost digit. The @ref length
-  //! argument is the number of digits to be set. Other digits are not affected.
-  //!
-  //! @param segments An array of size @ref length containing the raw segment values
-  //! @param length The number of digits to be modified
-  //! @param pos The position from which to start the modification (0 - leftmost, 3 - rightmost)
+/*!
+ * 	Exibe dados selecionados por um array de segmentos no periférico
+ *
+ * 	Essa função recebe valores segmentados ´crus´ como entrada e os exibe. O dado segmentado
+ * 	é dado por um array de bytes, cada byte correspondendo a um único dígito. Portanto, para
+ * 	cada byte, bit 0 é o segmento A, bit 1 é o segmento B, etc.
+ * 	O método pode definir todo o display bem como qualquer parte desejada do mesmo. O primeiro
+ * 	dígito é dado pelo argumento @ref pos, sendo 0 a posição do dígito definida mais a esquerda.
+ * 	O argumento @ref length é o número de dígitos a serem modificados. Outros dígitos não são
+ * 	afetados
+ *
+ * 	@param segments Um array de tamanho @ref length contendo os valores dos segmentos
+ * 	@param length O número de dígitos a serem modificados
+ * 	@param pos A posição de onde se inicia a modificação (0 - mais a esquerda,
+ * 		   3 - mais a direita)
+ *
+ */
   void setSegments(const uint8_t segments[], uint8_t length = 4, uint8_t pos = 0);
 
-  //! Clear the display
+ /*!
+  * Limpa/esvazia o display
+  */
   void clear();
 
-  //! Display a decimal number
-  //!
-  //! Dispaly the given argument as a decimal number.
-  //!
-  //! @param num The number to be shown
-  //! @param leading_zero When true, leading zeros are displayed. Otherwise unnecessary digits are
-  //!        blank. NOTE: leading zero is not supported with negative numbers.
-  //! @param length The number of digits to set. The user must ensure that the number to be shown
-  //!        fits to the number of digits requested (for example, if two digits are to be displayed,
-  //!        the number must be between 0 to 99)
-  //! @param pos The position of the most significant digit (0 - leftmost, 3 - rightmost)
+/*!
+ *	Exibe um valor decimal
+ *
+ *	Exibe o argumento dado no display
+ *
+ *	@param num O número a sem mostrado
+ *	@param leading_zero Quando TRUE, os zeros à esquerda são exibidos. Caso contrário, os dígitos
+ *	   	   não utilizados ficam apagados. NOTA: a exibição dos zeros a esquerda não é suportada com números
+ *		   negativos.
+ *	@param length O número de dígitos a serem exibidos. O usuário deve garantir que o número a ser exibido
+ *		   cabe no número de dígitos definidos nesse argumento (por exemplo, se dois dígitos devem ser exibidos,
+ *		   o número passado no argumento em @ref num deve ser entre 0 e 99)
+ *	@param pos A posição do dígito mais significativo (0- a esquerda, 3- a direita)
+ */
   void showNumberDec(int num, bool leading_zero = false, uint8_t length = 4, uint8_t pos = 0);
 
-  //! Display a decimal number, with dot control
-  //!
-  //! Dispaly the given argument as a decimal number. The dots between the digits (or colon)
-  //! can be individually controlled.
-  //!
-  //! @param num The number to be shown
-  //! @param dots Dot/Colon enable. The argument is a bitmask, with each bit corresponding to a dot
-  //!        between the digits (or colon mark, as implemented by each module). i.e.
-  //!        For displays with dots between each digit:
-  //!        * 0.000 (0b10000000)
-  //!        * 00.00 (0b01000000)
-  //!        * 000.0 (0b00100000)
-  //!        * 0.0.0.0 (0b11100000)
-  //!        For displays with just a colon:
-  //!        * 00:00 (0b01000000)
-  //!        For displays with dots and colons colon:
-  //!        * 0.0:0.0 (0b11100000)
-  //! @param leading_zero When true, leading zeros are displayed. Otherwise unnecessary digits are
-  //!        blank. NOTE: leading zero is not supported with negative numbers.
-  //! @param length The number of digits to set. The user must ensure that the number to be shown
-  //!        fits to the number of digits requested (for example, if two digits are to be displayed,
-  //!        the number must be between 0 to 99)
-  //! @param pos The position of the most significant digit (0 - leftmost, 3 - rightmost)
+/*!
+ * Exibe um valor decimal com ponto
+ *
+ * Exibe o argumento dado. Os pontos entre os dígitos podem ser individualmente controlados.
+ *
+ * @param num O número a ser exibido
+ * @param dots O ponto ativado. O argumento é uma máscara de bit, em que cada bit corresponde
+ * 		a um ponto entre os dígitos.
+ * 		Para exibit os pontos entre cada dígito:
+ * 		* 0.000 (0b10000000)
+ * 		* 00.00 (0b01000000)
+ * 		* 000.0 (0b00100000)
+ * 		* 0.0.0.0 (0b11100000)
+ * 		Para exibir os dois pontos:
+ * 		* 00:00 (0b01000000)
+ * 	@param leading_zero Quando TRUE, os zeros à esquerda são exibidos. Caso contrário, os dígitos
+ *	   	   não utilizados ficam apagados. NOTA: a exibição dos zeros a esquerda não é suportada com números
+ *		   negativos.
+ *  @param length O número de dígitos a serem exibidos. O usuário deve garantir que o número a ser exibido
+ *		   cabe no número de dígitos definidos nesse argumento (por exemplo, se dois dígitos devem ser exibidos,
+ *		   o número passado no argumento em @ref num deve ser entre 0 e 99)
+ *	@param pos A posição do dígito mais significativo (0- a esquerda, 3- a direita)
+ */
+
   void showNumberDecEx(int num, uint8_t dots = 0, bool leading_zero = false, uint8_t length = 4, uint8_t pos = 0);
 
-  //! Display a hexadecimal number, with dot control
-  //!
-  //! Dispaly the given argument as a hexadecimal number. The dots between the digits (or colon)
-  //! can be individually controlled.
-  //!
-  //! @param num The number to be shown
-  //! @param dots Dot/Colon enable. The argument is a bitmask, with each bit corresponding to a dot
-  //!        between the digits (or colon mark, as implemented by each module). i.e.
-  //!        For displays with dots between each digit:
-  //!        * 0.000 (0b10000000)
-  //!        * 00.00 (0b01000000)
-  //!        * 000.0 (0b00100000)
-  //!        * 0.0.0.0 (0b11100000)
-  //!        For displays with just a colon:
-  //!        * 00:00 (0b01000000)
-  //!        For displays with dots and colons colon:
-  //!        * 0.0:0.0 (0b11100000)
-  //! @param leading_zero When true, leading zeros are displayed. Otherwise unnecessary digits are
-  //!        blank
-  //! @param length The number of digits to set. The user must ensure that the number to be shown
-  //!        fits to the number of digits requested (for example, if two digits are to be displayed,
-  //!        the number must be between 0 to 99)
-  //! @param pos The position of the most significant digit (0 - leftmost, 3 - rightmost)
+ /*!
+  * Exibe um valor hexadecimal com ponto
+  *
+  * Exibe o argumento dado. Os pontos entre os dígitos podem ser individualmente controlados.
+  *
+  * @param num O número a ser exibido
+  * @param dots O ponto ativado. O argumento é uma máscara de bit, em que cada bit corresponde
+  * 		a um ponto entre os dígitos.
+  * 		Para exibit os pontos entre cada dígito:
+  * 		* 0.000 (0b10000000)
+  * 		* 00.00 (0b01000000)
+  * 		* 000.0 (0b00100000)
+  * 		* 0.0.0.0 (0b11100000)
+  * 		Para exibir os dois pontos:
+  * 		* 00:00 (0b01000000)
+  * @param leading_zero Quando TRUE, os zeros à esquerda são exibidos. Caso contrário, os dígitos
+  *	   	   não utilizados ficam apagados. NOTA: a exibição dos zeros a esquerda não é suportada com números
+  *		   negativos.
+  *  @param length O número de dígitos a serem exibidos. O usuário deve garantir que o número a ser exibido
+  *		   cabe no número de dígitos definidos nesse argumento (por exemplo, se dois dígitos devem ser exibidos,
+  *		   o número passado no argumento em @ref num deve ser entre 0 e 99)
+  *	@param pos A posição do dígito mais significativo (0- a esquerda, 3- a direita)
+  */
   void showNumberHexEx(uint16_t num, uint8_t dots = 0, bool leading_zero = false, uint8_t length = 4, uint8_t pos = 0);
 
-  //! Translate a single digit into 7 segment code
-  //!
-  //! The method accepts a number between 0 - 15 and converts it to the
-  //! code required to display the number on a 7 segment display.
-  //! Numbers between 10-15 are converted to hexadecimal digits (A-F)
-  //!
-  //! @param digit A number between 0 to 15
-  //! @return A code representing the 7 segment image of the digit (LSB - segment A;
-  //!         bit 6 - segment G; bit 7 - always zero)
+ /*!
+  * Traduz um único dígito no seu respectivo código de 7 segmentos
+  *
+  * O método aceita um valor entre 0 e 15 e converte no código necessário para exibir
+  * o valor no display de 7 segmentos.
+  * Números entre 10 e 15 são convertidos para dígitos hexadecimais (A-F)
+  *
+  * @param digit Um valor entre 0 e 15
+  * @return Um código representando a imagem do dígito no display de 7 segmentos
+  */
   uint8_t encodeDigit(uint8_t digit);
 
+ /*!
+  * Delay
+  */
   void delayMs(unsigned int time);
 
 protected:

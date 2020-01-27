@@ -1,19 +1,48 @@
+/*!
+ * @copyright   � 2020 Caio Arthur Sales Telles <csalestelles@gmail.com>
+ *
+ * @brief       Exemplo de uso do periférico TM1637 na MKL25Z.
+ *
+ * @file        mkl_TM1637.cpp
+ * @version     1.0
+ * @date        21 de janeiro de 2020
+ *
+ * @section     HARDWARES & SOFTWARES
+ *              +board        FRDM-KL25Z da NXP.
+ *              +processor    MKL25Z128VLK4 - ARM Cortex-M0+.
+ *              +peripheral   Display TM1637.
+ *              +compiler     MCUXpresso IDE
+ *              +manual       L25P80M48SF0RM, Rev.3, September 2012
+ *              +revisions    Versão(data): Descrição breve.
+ *                             ++ 1.0 (26 de janeiro de 2020): Versão inicial.
+ *
+ * @section     AUTHORS & DEVELOPERS
+ *              +institution  Universidade Federal do Amazonas
+ *              +courses      Engenharia da Computação/ Engenharia Elétrica
+ *              +teacher      Miguel Grimm <miguelgrimm@gmail.com>
+ *              +student      Versão inicial:
+ *                             ++ Caio Arthur Sales Telles <csalestelles@gmail.com>
+ *
+ * @section     LICENSE
+ *
+ *              GNU General Public License (GNU GPL).
+ *
+ *              Este programa é um software livre; Você pode redistribuí-lo
+ *              e/ou modificá-lo de acordo com os termos do "GNU General Public
+ *              License" como publicado pela Free Software Foundation; Seja a
+ *              versão da licença, ou qualquer vers�o posterior.
+ *
+ *              Este programa é distribuído na esperança de que seja útil,
+ *              mas SEM QUALQUER GARANTIA; Sem a garantia implícita de
+ *              COMERCIALIZAÇÃO OU USO PARA UM DETERMINADO PROPÓSITO.
+ *              Veja o site da "GNU General Public License" para mais detalhes.
+ *
+ *              Para mais informações ou dúvidas sobre o funcionamento do periférico
+ *              TM1637 e/ou o código abaixo, entrar em contato com Caio Arthur.
+ *
+ * @htmlonly    http://www.gnu.org/copyleft/gpl.html
+ */
 
-//  Author: avishorp@gmail.com
-//
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 extern "C" {
   #include <stdlib.h>
@@ -60,17 +89,15 @@ static const uint8_t minusSegments = 0b01000000;
 
 TM1637Display::TM1637Display(mkl_DevGPIO pinClk, mkl_DevGPIO pinDIO, unsigned int bitDelay)
 {
-	// Copy the pin numbers
+	// Seta os pins a serem utilizados pelo periférico
 	m_pinClk = pinClk;
 	m_pinDIO = pinDIO;
 	m_bitDelay = bitDelay;
 
-	// Set the pin direction and default value.
-	// Both pins are set as inputs, allowing the pull-up resistors to pull them up
-    m_pinClk.setPortMode(gpio_input);	//	pinMode(m_pinClk, INPUT);
-    m_pinDIO.setPortMode(gpio_input);	//	pinMode(m_pinDIO,INPUT);
-	m_pinClk.writeBit(0);	//	digitalWrite(m_pinClk, LOW);
-	m_pinDIO.writeBit(0);	//	digitalWrite(m_pinDIO, LOW);
+    m_pinClk.setPortMode(gpio_input);
+    m_pinDIO.setPortMode(gpio_input);
+	m_pinClk.writeBit(0);
+	m_pinDIO.writeBit(0);
 }
 
 void TM1637Display::setBrightness(uint8_t brightness, bool on)
@@ -80,22 +107,19 @@ void TM1637Display::setBrightness(uint8_t brightness, bool on)
 
 void TM1637Display::setSegments(const uint8_t segments[], uint8_t length, uint8_t pos)
 {
-    // Write COMM1
+
 	start();
 	writeByte(TM1637_I2C_COMM1);
 	stop();
 
-	// Write COMM2 + first digit address
 	start();
 	writeByte(TM1637_I2C_COMM2 + (pos & 0x03));
 
-	// Write the data bytes
 	for (uint8_t k=0; k < length; k++)
 	  writeByte(segments[k]);
 
 	stop();
 
-	// Write COMM3 + brightness
 	start();
 	writeByte(TM1637_I2C_COMM3 + (m_brightness & 0x0f));
 	stop();
@@ -137,25 +161,18 @@ void TM1637Display::showNumberBaseEx(int8_t base, uint16_t num, uint8_t dots, bo
     uint8_t digits[4];
 
 	if (num == 0 && !leading_zero) {
-		// Singular case - take care separately
 		for(uint8_t i = 0; i < (length-1); i++)
 			digits[i] = 0;
 		digits[length-1] = encodeDigit(0);
 	}
 	else {
-		//uint8_t i = length-1;
-		//if (negative) {
-		//	// Negative number, show the minus sign
-		//    digits[i] = minusSegments;
-		//	i--;
-		//}
 		
 		for(int i = length-1; i >= 0; --i)
 		{
 		    uint8_t digit = num % base;
 			
 			if (digit == 0 && num == 0 && leading_zero == false)
-			    // Leading zero is blank
+
 				digits[i] = 0;
 			else
 			    digits[i] = encodeDigit(digit);
@@ -192,17 +209,17 @@ void TM1637Display::bitDelay()
 
 void TM1637Display::start()
 {
-	m_pinDIO.setPortMode(gpio_output);		//	pinMode(m_pinDIO, OUTPUT);
+	m_pinDIO.setPortMode(gpio_output);
 	bitDelay();
 }
 
 void TM1637Display::stop()
 {
-	m_pinDIO.setPortMode(gpio_output);		//	pinMode(m_pinDIO, OUTPUT);
+	m_pinDIO.setPortMode(gpio_output);
 	bitDelay();
-	m_pinClk.setPortMode(gpio_input);		//	pinMode(m_pinClk, INPUT);
+	m_pinClk.setPortMode(gpio_input);
 	bitDelay();
-	m_pinDIO.setPortMode(gpio_input);		//	pinMode(m_pinDIO, INPUT);
+	m_pinDIO.setPortMode(gpio_input);
 	bitDelay();
 }
 
@@ -210,42 +227,39 @@ bool TM1637Display::writeByte(uint8_t b)
 {
 	uint8_t data = b;
 
-  // 8 Data Bits
+
 	for(uint8_t i = 0; i < 8; i++) {
-    // CLK low
-		m_pinClk.setPortMode(gpio_output);			//	pinMode(m_pinClk, OUTPUT);
+
+		m_pinClk.setPortMode(gpio_output);
 		bitDelay();
 
-	// Set data bit
 		if (data & 0x01)
-			m_pinDIO.setPortMode(gpio_input);			//	pinMode(m_pinDIO, INPUT);
+			m_pinDIO.setPortMode(gpio_input);
 		else
-			m_pinDIO.setPortMode(gpio_output);			//	pinMode(m_pinDIO, OUTPUT);
+			m_pinDIO.setPortMode(gpio_output);
 
 		bitDelay();
 
-	// CLK high
-		m_pinClk.setPortMode(gpio_input);				//	pinMode(m_pinClk, INPUT);
+
+		m_pinClk.setPortMode(gpio_input);
 		bitDelay();
 		data = data >> 1;
 	}
 
-  // Wait for acknowledge
-  // CLK to zero
-	m_pinClk.setPortMode(gpio_output);				//	pinMode(m_pinClk, OUTPUT);
-	m_pinDIO.setPortMode(gpio_input);				//	pinMode(m_pinDIO, INPUT);
+	m_pinClk.setPortMode(gpio_output);
+	m_pinDIO.setPortMode(gpio_input);
 	bitDelay();
 
-  // CLK to high
-	m_pinClk.setPortMode(gpio_input);				//	pinMode(m_pinClk, INPUT);
+
+	m_pinClk.setPortMode(gpio_input);
 	bitDelay();
-	uint8_t ack = m_pinDIO.readBit();			 	//	digitalRead(m_pinDIO);
+	uint8_t ack = m_pinDIO.readBit();
 	if (ack == 0) {
-		m_pinDIO.setPortMode(gpio_output);			//	pinMode(m_pinDIO, OUTPUT);
+		m_pinDIO.setPortMode(gpio_output);
 	}
 
 	bitDelay();
-	m_pinClk.setPortMode(gpio_output); 				//	pinMode(m_pinClk, OUTPUT);
+	m_pinClk.setPortMode(gpio_output);
 	bitDelay();
 
 	return ack;

@@ -14,7 +14,7 @@
  *              +compiler     MCUXpresso IDE
  *              +manual       L25P80M48SF0RM, Rev.3, September 2012
  *              +revisions    Versão(data): Descrição breve.
- *                             ++ 1.0 (21 de janeiro de 2020): Versão inicial.
+ *                             ++ 1.0 (26 de janeiro de 2020): Versão inicial.
  *
  * @section     AUTHORS & DEVELOPERS
  *              +institution  Universidade Federal do Amazonas
@@ -27,15 +27,18 @@
  *
  *              GNU General Public License (GNU GPL).
  *
- *              Este programa � um software livre; Voc� pode redistribu�-lo
- *              e/ou modific�-lo de acordo com os termos do "GNU General Public
+ *              Este programa é um software livre; Você pode redistribuí-lo
+ *              e/ou modificá-lo de acordo com os termos do "GNU General Public
  *              License" como publicado pela Free Software Foundation; Seja a
- *              vers�o 3 da licen�a, ou qualquer vers�o posterior.
+ *              versão da licença, ou qualquer vers�o posterior.
  *
- *              Este programa � distribu�do na esperan�a de que seja �til,
- *              mas SEM QUALQUER GARANTIA; Sem a garantia impl�cita de
- *              COMERCIALIZA��O OU USO PARA UM DETERMINADO PROP�SITO.
+ *              Este programa é distribuído na esperança de que seja útil,
+ *              mas SEM QUALQUER GARANTIA; Sem a garantia implícita de
+ *              COMERCIALIZAÇÃO OU USO PARA UM DETERMINADO PROPÓSITO.
  *              Veja o site da "GNU General Public License" para mais detalhes.
+ *
+ *              Para mais informações ou dúvidas sobre o funcionamento do periférico
+ *              TM1637 e/ou o código abaixo, entrar em contato com Caio Arthur.
  *
  * @htmlonly    http://www.gnu.org/copyleft/gpl.html
  */
@@ -46,12 +49,20 @@
 #include "TM1637Display.h"
 
 /*!
- * 	Declara��o do led RGB interno da placa
+ * 	Declaração dos pinos de clock e dados do periférico
  */
 mkl_DevGPIO dio(gpio_PTA2);
 mkl_DevGPIO clk(gpio_PTA1);
 
+/*!
+ *	Declaração do display
+ */
+
 TM1637Display display(clk,dio);
+
+/*
+ * 	Definição dos segmentos que acendem ao chamar a constante UP e DOWN
+ */
 
 const uint8_t up[] = {
 	SEG_B | SEG_C | SEG_D | SEG_E | SEG_F,			// U
@@ -63,6 +74,7 @@ const uint8_t down[] = {
 	SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F	// O
 };
 
+
 void delayms(unsigned int time) {
 	unsigned int i;
 	int j;
@@ -72,9 +84,9 @@ void delayms(unsigned int time) {
 	}
 }
 /*!
- *   @brief    Realiza a configura��es das io's e espera pelas interrup��es.
+ *   @brief    Realiza a simulação do funcionamento do elevador na subida e na descida
  *
- *   Este programa realiza o teste da classe do perif�rico systick.
+ *   Este programa realiza o teste da classe do periférico TM1637.
  *
  *   @return  sempre retorna o valor 0.
  */
@@ -95,7 +107,5 @@ int main(void) {
     		floor--;
     		delayms(4);
     	}
-        /* Espera aqui por uma interrupcao */
-
     }
 }

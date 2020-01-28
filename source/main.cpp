@@ -94,18 +94,19 @@ int main(void) {
 	display.setBrightness(7);
     while (1) {
     	int floor = 0;
-    	while(floor < 6) {
-    		display.showNumberDec(floor, false, 1, 0);
+    	while(floor < 15) {
+    		display.showNumberDec(floor, false, 2, 0);
     		display.setSegments(up, 2, 2);
     		floor++;
-    		delayms(4);
+    		delayms(2);
     	}
     	floor--;
+//    	floor = 0;
     	while(floor >= 0) {
-    		display.showNumberDec(floor, false, 1, 0);
+    		display.showNumberDec(floor, false, 2, 0);
     		display.setSegments(down, 2, 2);
     		floor--;
-    		delayms(4);
+    		delayms(2);
     	}
     }
 }

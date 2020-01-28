@@ -43,25 +43,25 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: Display_TM1637.axf
+all: TM1637_ARM-Architeture.axf
 
 # Tool invocations
-Display_TM1637.axf: $(OBJS) $(USER_OBJS)
+TM1637_ARM-Architeture.axf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU C++ Linker'
-	arm-none-eabi-c++ -nostdlib -Xlinker -Map="Display_TM1637.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m0plus -mthumb -T Display_TM1637_Debug.ld -o "Display_TM1637.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-c++ -nostdlib -Xlinker -Map="TM1637_ARM-Architeture.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m0plus -mthumb -T Display_TM1637_Debug.ld -o "TM1637_ARM-Architeture.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CPP_DEPS)$(C_DEPS) Display_TM1637.axf
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CPP_DEPS)$(C_DEPS) TM1637_ARM-Architeture.axf
 	-@echo ' '
 
 post-build:
 	-@echo 'Performing post-build steps'
-	-arm-none-eabi-size "Display_TM1637.axf"; # arm-none-eabi-objcopy -v -O binary "Display_TM1637.axf" "Display_TM1637.bin" ; # checksum -p MKL25Z128xxx4 -d "Display_TM1637.bin";
+	-arm-none-eabi-size "TM1637_ARM-Architeture.axf"; # arm-none-eabi-objcopy -v -O binary "TM1637_ARM-Architeture.axf" "TM1637_ARM-Architeture.bin" ; # checksum -p MKL25Z128xxx4 -d "TM1637_ARM-Architeture.bin";
 	-@echo ' '
 
 .PHONY: all clean dependents post-build

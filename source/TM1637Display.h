@@ -150,7 +150,7 @@ public:
  * 		a um ponto entre os dígitos.
  * 		Para exibit os pontos entre cada dígito:
  * 		* 0.000 (0b10000000)
- * 		* 00.00 (0b01000000)
+ * 		* 00:00 (0b01000000)
  * 		* 000.0 (0b00100000)
  * 		* 0.0.0.0 (0b11100000)
  * 		Para exibir os dois pontos:

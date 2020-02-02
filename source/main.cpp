@@ -90,6 +90,7 @@ int main(void) {
 	setup();
 
     while (1) {
+    	int floor = 0;
     	while(floor < 16) {
     		display.showNumberHexEx(floor, first);
     		display.showNumberHexEx(floor, second);

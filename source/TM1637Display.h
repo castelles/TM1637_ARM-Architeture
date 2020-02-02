@@ -58,7 +58,30 @@
 #define SEG_G   0b01000000
 #define SEG_DP  0b10000000
 
-#define DEFAULT_BIT_DELAY  2
+// Mostra os zeros á esquerda caso haja
+enum leadingZero : bool {
+	show = true,
+	hide = false
+};
+
+enum numLength : uint8_t {
+	one = 1,
+	two = 2,
+	three = 3,
+	four = 0
+};
+
+enum digitPosition : uint8_t {
+	first = 0,
+	second = 1,
+	third = 2,
+	fourth = 3
+};
+
+enum twoDots : uint8_t {
+	showDots = 0b11100000,
+	hideDots = 0
+};
 
 /*!
  *  @class    mkl_TM1637.
@@ -89,7 +112,7 @@ public:
  *  @param bitDelay - O delay em milissegundos entre a transição de bit no buffer conectado ao display
  *
  */
-  TM1637Display(mkl_DevGPIO pinClk, mkl_DevGPIO pinDIO, unsigned int bitDelay = DEFAULT_BIT_DELAY);
+	TM1637Display(mkl_DevGPIO pinClk, mkl_DevGPIO pinDIO);
 /*!
  * 	Define o nível do brilho do display
  *
@@ -98,7 +121,7 @@ public:
  * 	@param brightness Um valor de 0 (menos brilho) a 7 (mais brilho)
  * 	@param on Liga ou desliga o display
  */
-  void setBrightness(uint8_t brightness, bool on = true);
+	void setBrightness(uint8_t _brightness, bool on = true);
 
 /*!
  * 	Exibe dados selecionados por um array de segmentos no periférico
@@ -113,16 +136,46 @@ public:
  *
  * 	@param segments Um array de tamanho @ref length contendo os valores dos segmentos
  * 	@param length O número de dígitos a serem modificados
- * 	@param pos A posição de onde se inicia a modificação (0 - mais a esquerda,
- * 		   3 - mais a direita)
+ * 	@param pos A posição de onde se inicia a modificação (0 [first] - mais a esquerda,
+ * 		   3 [fourth] - mais a direita)
  *
  */
-  void setSegments(const uint8_t segments[], uint8_t length = 4, uint8_t pos = 0);
+	void setSegments(const uint8_t segments[], digitPosition);
 
- /*!
-  * Limpa/esvazia o display
-  */
-  void clear();
+  //! @overload
+	void setSegments(const uint8_t segments[], digitPosition pos, numLength length);
+
+/*!
+ * Limpa/esvazia o display
+ */
+	void clear();
+
+/*!
+ * Testa todos os segmentos do displau
+ *
+ */
+	void ligthSegments();
+
+/*!
+ * Define o modo dígito que será exibido
+ *
+ * @param _digitMode é o modo do dígito, caso seu valor seja hide, ele não exibe os zeros a esquerda
+ * 		do número, caso seja show, ele exibe esses zeros
+ */
+	void setDigitMode(leadingZero _digitMode);
+/*!
+ * Define o número de algarismo acesos para exibir o número
+ *
+ * @param _length é esse número, indo do valor one (um dígito aceso para exxibir o algarismo) até four (quatro dígitos acesos)
+ */
+	void setLength(numLength _length);
+
+/*!
+ * Define se irá exibir os dois pontos do display
+ *
+ * @param on se for true exibe os dois pontos, se não apaga os dois pontos
+ */
+	void setDoubleDots(bool on);
 
 /*!
  *	Exibe um valor decimal
@@ -138,7 +191,10 @@ public:
  *		   o número passado no argumento em @ref num deve ser entre 0 e 99)
  *	@param pos A posição do dígito mais significativo (0- a esquerda, 3- a direita)
  */
-  void showNumberDec(int num, bool leading_zero = false, uint8_t length = 4, uint8_t pos = 0);
+	void showNumberDec(int num, digitPosition pos);
+
+//! @overload
+	void showNumberDec(int num, digitPosition pos, leadingZero leading_zero, numLength length);
 
 /*!
  * Exibe um valor decimal com ponto
@@ -148,13 +204,8 @@ public:
  * @param num O número a ser exibido
  * @param dots O ponto ativado. O argumento é uma máscara de bit, em que cada bit corresponde
  * 		a um ponto entre os dígitos.
- * 		Para exibit os pontos entre cada dígito:
- * 		* 0.000 (0b10000000)
- * 		* 00:00 (0b01000000)
- * 		* 000.0 (0b00100000)
- * 		* 0.0.0.0 (0b11100000)
  * 		Para exibir os dois pontos:
- * 		* 00:00 (0b01000000)
+ * 		* 00:00 (0b11100000)
  * 	@param leading_zero Quando TRUE, os zeros à esquerda são exibidos. Caso contrário, os dígitos
  *	   	   não utilizados ficam apagados. NOTA: a exibição dos zeros a esquerda não é suportada com números
  *		   negativos.
@@ -163,70 +214,78 @@ public:
  *		   o número passado no argumento em @ref num deve ser entre 0 e 99)
  *	@param pos A posição do dígito mais significativo (0- a esquerda, 3- a direita)
  */
+	void showNumberDecEx(int num, digitPosition pos);
 
-  void showNumberDecEx(int num, uint8_t dots = 0, bool leading_zero = false, uint8_t length = 4, uint8_t pos = 0);
+//! @overload
+	void showNumberDecEx(int num, digitPosition pos, twoDots dots,
+			leadingZero leading_zero,numLength length);
 
- /*!
-  * Exibe um valor hexadecimal com ponto
-  *
-  * Exibe o argumento dado. Os pontos entre os dígitos podem ser individualmente controlados.
-  *
-  * @param num O número a ser exibido
-  * @param dots O ponto ativado. O argumento é uma máscara de bit, em que cada bit corresponde
-  * 		a um ponto entre os dígitos.
-  * 		Para exibit os pontos entre cada dígito:
-  * 		* 0.000 (0b10000000)
-  * 		* 00.00 (0b01000000)
-  * 		* 000.0 (0b00100000)
-  * 		* 0.0.0.0 (0b11100000)
-  * 		Para exibir os dois pontos:
-  * 		* 00:00 (0b01000000)
-  * @param leading_zero Quando TRUE, os zeros à esquerda são exibidos. Caso contrário, os dígitos
-  *	   	   não utilizados ficam apagados. NOTA: a exibição dos zeros a esquerda não é suportada com números
-  *		   negativos.
-  *  @param length O número de dígitos a serem exibidos. O usuário deve garantir que o número a ser exibido
-  *		   cabe no número de dígitos definidos nesse argumento (por exemplo, se dois dígitos devem ser exibidos,
-  *		   o número passado no argumento em @ref num deve ser entre 0 e 99)
-  *	@param pos A posição do dígito mais significativo (0- a esquerda, 3- a direita)
-  */
-  void showNumberHexEx(uint16_t num, uint8_t dots = 0, bool leading_zero = false, uint8_t length = 4, uint8_t pos = 0);
+/*!
+ * Exibe um valor hexadecimal com ponto
+ *
+ * Exibe o argumento dado. Os pontos entre os dígitos podem ser individualmente controlados.
+ *
+ * @param num O número a ser exibido
+ * @param dots O ponto ativado. O argumento é uma máscara de bit, em que cada bit corresponde
+ * 		a um ponto entre os dígitos.
+ * 		Para exibir os dois pontos:
+ * 		* 00:00 (0b11100000)
+ * @param leading_zero Quando TRUE, os zeros à esquerda são exibidos. Caso contrário, os dígitos
+ *	   	   não utilizados ficam apagados. NOTA: a exibição dos zeros a esquerda não é suportada com números
+ *		   negativos.
+ *  @param length O número de dígitos a serem exibidos. O usuário deve garantir que o número a ser exibido
+ *		   cabe no número de dígitos definidos nesse argumento (por exemplo, se dois dígitos devem ser exibidos,
+ *		   o número passado no argumento em @ref num deve ser entre 0 e 99)
+ *	@param pos A posição do dígito mais significativo (0- a esquerda, 3- a direita)
+ */
+	void showNumberHexEx(uint16_t num, digitPosition pos);
 
- /*!
-  * Traduz um único dígito no seu respectivo código de 7 segmentos
-  *
-  * O método aceita um valor entre 0 e 15 e converte no código necessário para exibir
-  * o valor no display de 7 segmentos.
-  * Números entre 10 e 15 são convertidos para dígitos hexadecimais (A-F)
-  *
-  * @param digit Um valor entre 0 e 15
-  * @return Um código representando a imagem do dígito no display de 7 segmentos
-  */
-  uint8_t encodeDigit(uint8_t digit);
+//! @overload
+	void showNumberHexEx(uint16_t num, digitPosition pos, twoDots dots,
+			leadingZero leading_zero, numLength length);
 
- /*!
-  * Delay
-  */
-  void delayMs(unsigned int time);
+/*!
+ * Traduz um único dígito no seu respectivo código de 7 segmentos
+ *
+ * O método aceita um valor entre 0 e 15 e converte no código necessário para exibir
+ * o valor no display de 7 segmentos.
+ * Números entre 10 e 15 são convertidos para dígitos hexadecimais (A-F)
+ *
+ * @param digit Um valor entre 0 e 15
+ * @return Um código representando a imagem do dígito no display de 7 segmentos
+ */
+	uint8_t encodeDigit(uint8_t digit);
 
 protected:
-   void bitDelay();
 
-   void start();
+/*!
+ * Delay
+ */
+	void fastDelay();
 
-   void stop();
+	void start();
 
-   bool writeByte(uint8_t b);
+	void stop();
 
-   void showDots(uint8_t dots, uint8_t* digits);
+	bool writeByte(uint8_t b);
+
+	void writeDots(uint8_t dots, uint8_t* digits);
    
-   void showNumberBaseEx(int8_t base, uint16_t num, uint8_t dots = 0, bool leading_zero = false, uint8_t length = 4, uint8_t pos = 0);
-
+	void showNumberBaseEx(int8_t base, uint16_t num, twoDots dots, leadingZero leading_zero,
+           numLength length, digitPosition pos);
 
 private:
 	mkl_DevGPIO m_pinClk;
 	mkl_DevGPIO m_pinDIO;
-	uint8_t m_brightness;
-	unsigned int m_bitDelay;
+	uint8_t brightness;
+
+/*!
+ * Atributos enumerados
+ */
+	numLength digitLength = one;
+	leadingZero digitMode = hide;
+	digitPosition position;
+	twoDots dotsMask = hideDots;
 };
 
 #endif // __TM1637DISPLAY__

@@ -87,25 +87,48 @@ const uint8_t digitToSegment[] = {
 
 static const uint8_t minusSegments = 0b01000000;
 
-TM1637Display::TM1637Display(mkl_DevGPIO pinClk, mkl_DevGPIO pinDIO, unsigned int bitDelay)
+TM1637Display::TM1637Display(mkl_DevGPIO pinClk, mkl_DevGPIO pinDIO)
 {
 	// Seta os pins a serem utilizados pelo periférico
 	m_pinClk = pinClk;
 	m_pinDIO = pinDIO;
-	m_bitDelay = bitDelay;
 
     m_pinClk.setPortMode(gpio_input);
     m_pinDIO.setPortMode(gpio_input);
 	m_pinClk.writeBit(0);
 	m_pinDIO.writeBit(0);
+
+	dotsMask = hideDots;
+	digitLength = one;
+	digitMode = hide;
+
 }
 
-void TM1637Display::setBrightness(uint8_t brightness, bool on)
+void TM1637Display::setBrightness(uint8_t _brightness, bool on)
 {
-	m_brightness = (brightness & 0x7) | (on? 0x08 : 0x00);
+	brightness = (brightness & 0x7) | (on? 0x08 : 0x00);
 }
 
-void TM1637Display::setSegments(const uint8_t segments[], uint8_t length, uint8_t pos)
+void TM1637Display::setSegments(const uint8_t segments[], digitPosition pos)
+{
+	start();
+	writeByte(TM1637_I2C_COMM1);
+	stop();
+
+	start();
+	writeByte(TM1637_I2C_COMM2 + (pos & 0x03));
+
+	for (uint8_t k=0; k < digitLength; k++)
+		writeByte(segments[k]);
+
+	stop();
+
+	start();
+	writeByte(TM1637_I2C_COMM3 + (brightness & 0x0f));
+	stop();
+}
+
+void TM1637Display::setSegments(const uint8_t segments[], digitPosition pos, numLength length)
 {
 
 	start();
@@ -121,35 +144,73 @@ void TM1637Display::setSegments(const uint8_t segments[], uint8_t length, uint8_
 	stop();
 
 	start();
-	writeByte(TM1637_I2C_COMM3 + (m_brightness & 0x0f));
+	writeByte(TM1637_I2C_COMM3 + (brightness & 0x0f));
 	stop();
 }
 
 void TM1637Display::clear()
 {
-    uint8_t data[] = { 0, 0, 0, 0 };
-	setSegments(data);
+    uint8_t data[] = { 0,0};
+	setSegments(data,first,two);
+	setSegments(data,third,two);
 }
 
-void TM1637Display::showNumberDec(int num, bool leading_zero, uint8_t length, uint8_t pos)
+void TM1637Display::ligthSegments()
 {
-  showNumberDecEx(num, 0, leading_zero, length, pos);
+	showNumberDecEx(8,fourth,showDots,hide,one);
+	showNumberDecEx(8,third,showDots,hide,one);
+	showNumberDecEx(8,second,showDots,hide,one);
+	showNumberDecEx(8,first,showDots,hide,one);
 }
 
-void TM1637Display::showNumberDecEx(int num, uint8_t dots, bool leading_zero,
-                                    uint8_t length, uint8_t pos)
+void TM1637Display::setDigitMode(leadingZero _digitMode) {
+	digitMode = _digitMode;
+}
+
+void TM1637Display::setLength(numLength _length) {
+	digitLength = _length;
+}
+
+void TM1637Display::setDoubleDots(bool on)
 {
-  showNumberBaseEx(num < 0? -10 : 10, num < 0? -num : num, dots, leading_zero, length, pos);
+	dotsMask = on ? showDots : hideDots;
 }
 
-void TM1637Display::showNumberHexEx(uint16_t num, uint8_t dots, bool leading_zero,
-                                    uint8_t length, uint8_t pos)
+void TM1637Display::showNumberDec(int num, digitPosition pos)
 {
-  showNumberBaseEx(16, num, dots, leading_zero, length, pos);
+	showNumberDecEx(num, pos, hideDots, digitMode, digitLength);
 }
 
-void TM1637Display::showNumberBaseEx(int8_t base, uint16_t num, uint8_t dots, bool leading_zero,
-                                    uint8_t length, uint8_t pos)
+void TM1637Display::showNumberDec(int num, digitPosition pos,
+		leadingZero leading_zero, numLength length)
+{
+	showNumberDecEx(num, pos, dotsMask, leading_zero, length);
+}
+
+void TM1637Display::showNumberDecEx(int num, digitPosition pos)
+{
+	showNumberBaseEx(num < 0? -10 : 10, num < 0? -num : num, dotsMask, digitMode, digitLength, pos);
+}
+
+void TM1637Display::showNumberDecEx(int num, digitPosition pos, twoDots dots, leadingZero leading_zero,
+                                    numLength length)
+{
+	showNumberBaseEx(num < 0? -10 : 10, num < 0? -num : num, dots, leading_zero, length, pos);
+}
+
+void TM1637Display::showNumberHexEx(uint16_t num, digitPosition pos)
+{
+	showNumberBaseEx(16, num, dotsMask, digitMode, digitLength, pos);
+}
+
+void TM1637Display::showNumberHexEx(uint16_t num, digitPosition pos, twoDots dots, leadingZero leading_zero,
+                                    numLength length)
+{
+	showNumberBaseEx(16, num, dots, leading_zero, length, pos);
+}
+
+void TM1637Display::showNumberBaseEx(int8_t base, uint16_t num, twoDots dots, leadingZero leading_zero,
+                                    numLength length, digitPosition pos)
 {
     bool negative = false;
 	if (base < 0) {
@@ -187,40 +248,35 @@ void TM1637Display::showNumberBaseEx(int8_t base, uint16_t num, uint8_t dots, bo
 
 		if(dots != 0)
 		{
-			showDots(dots, digits);
+			writeDots(dots, digits);
 		}
     }
-    setSegments(digits, length, pos);
+    setSegments(digits, pos, length);
 }
 
-void TM1637Display::delayMs(unsigned int time) {
-		unsigned int i;
+void TM1637Display::fastDelay() {
+	unsigned int i;
 	int j;
 
-	for (i = 0 ; i < time; i++) {
-		for (j = 0; j < 5000; j++) {}
+	for (i = 0 ; i < 2; i++) {
+		for (j = 0; j < 1000; j++) {}
 	}
-}
-
-void TM1637Display::bitDelay()
-{
-	delayMs(m_bitDelay);
 }
 
 void TM1637Display::start()
 {
 	m_pinDIO.setPortMode(gpio_output);
-	bitDelay();
+	fastDelay();
 }
 
 void TM1637Display::stop()
 {
 	m_pinDIO.setPortMode(gpio_output);
-	bitDelay();
+	fastDelay();
 	m_pinClk.setPortMode(gpio_input);
-	bitDelay();
+	fastDelay();
 	m_pinDIO.setPortMode(gpio_input);
-	bitDelay();
+	fastDelay();
 }
 
 bool TM1637Display::writeByte(uint8_t b)
@@ -231,41 +287,41 @@ bool TM1637Display::writeByte(uint8_t b)
 	for(uint8_t i = 0; i < 8; i++) {
 
 		m_pinClk.setPortMode(gpio_output);
-		bitDelay();
+		fastDelay();
 
 		if (data & 0x01)
 			m_pinDIO.setPortMode(gpio_input);
 		else
 			m_pinDIO.setPortMode(gpio_output);
 
-		bitDelay();
+		fastDelay();
 
 
 		m_pinClk.setPortMode(gpio_input);
-		bitDelay();
+		fastDelay();
 		data = data >> 1;
 	}
 
 	m_pinClk.setPortMode(gpio_output);
 	m_pinDIO.setPortMode(gpio_input);
-	bitDelay();
+	fastDelay();
 
 
 	m_pinClk.setPortMode(gpio_input);
-	bitDelay();
+	fastDelay();
 	uint8_t ack = m_pinDIO.readBit();
 	if (ack == 0) {
 		m_pinDIO.setPortMode(gpio_output);
 	}
 
-	bitDelay();
+	fastDelay();
 	m_pinClk.setPortMode(gpio_output);
-	bitDelay();
+	fastDelay();
 
 	return ack;
 }
 
-void TM1637Display::showDots(uint8_t dots, uint8_t* digits)
+void TM1637Display::writeDots(uint8_t dots, uint8_t* digits)
 {
     for(int i = 0; i < 4; ++i)
     {

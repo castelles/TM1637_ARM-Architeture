@@ -51,6 +51,7 @@
 /*!
  * 	Declaração dos pinos de clock e dados do periférico
  */
+
 mkl_DevGPIO dio(gpio_PTA2);
 mkl_DevGPIO clk(gpio_PTA1);
 
@@ -60,21 +61,6 @@ mkl_DevGPIO clk(gpio_PTA1);
 
 TM1637Display display(clk,dio);
 
-/*
- * 	Definição dos segmentos que acendem ao chamar a constante UP e DOWN
- */
-
-const uint8_t up[] = {
-	SEG_B | SEG_C | SEG_D | SEG_E | SEG_F,			// U
-	SEG_A | SEG_B | SEG_E | SEG_F | SEG_G			// P
-};
-
-const uint8_t down[] = {
-	SEG_B | SEG_C | SEG_D | SEG_E | SEG_G,			// d
-	SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F	// O
-};
-
-
 void delayms(unsigned int time) {
 	unsigned int i;
 	int j;
@@ -83,6 +69,15 @@ void delayms(unsigned int time) {
 		for (j = 0; j < 7000; j++) {}
 	}
 }
+
+void setup(){
+	display.setBrightness(7);
+	display.setDigitMode(hide);
+	display.setLength(one);
+	display.setDoubleDots(false);
+}
+
+uint8_t data[] = { };
 /*!
  *   @brief    Realiza a simulação do funcionamento do elevador na subida e na descida
  *
@@ -91,22 +86,17 @@ void delayms(unsigned int time) {
  *   @return  sempre retorna o valor 0.
  */
 int main(void) {
-	display.setBrightness(7);
+
+	setup();
+
     while (1) {
-    	int floor = 0;
-    	while(floor < 15) {
-    		display.showNumberDec(floor, false, 2, 0);
-    		display.setSegments(up, 2, 2);
+    	while(floor < 16) {
+    		display.showNumberHexEx(floor, first);
+    		display.showNumberHexEx(floor, second);
+    		display.showNumberHexEx(floor, third);
+    		display.showNumberHexEx(floor, fourth);
     		floor++;
-    		delayms(2);
-    	}
-    	floor--;
-//    	floor = 0;
-    	while(floor >= 0) {
-    		display.showNumberDec(floor, false, 2, 0);
-    		display.setSegments(down, 2, 2);
-    		floor--;
-    		delayms(2);
+
     	}
     }
 }

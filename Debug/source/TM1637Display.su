@@ -14,12 +14,12 @@ TM1637Display.cpp:158:6:void TM1637Display::ligthSegments()	24	static
 TM1637Display.cpp:166:6:void TM1637Display::setDigitMode(leadingZero)	16	static
 TM1637Display.cpp:170:6:void TM1637Display::setLength(numLength)	16	static
 TM1637Display.cpp:174:6:void TM1637Display::setDoubleDots(bool)	16	static
-TM1637Display.cpp:179:6:void TM1637Display::showNumberDec(int, digitPosition)	40	static
-TM1637Display.cpp:184:6:void TM1637Display::showNumberDec(int, digitPosition, leadingZero, numLength)	40	static
-TM1637Display.cpp:190:6:void TM1637Display::showNumberDecEx(int, digitPosition)	56	static
-TM1637Display.cpp:195:6:void TM1637Display::showNumberDecEx(int, digitPosition, twoDots, leadingZero, numLength)	48	static
-TM1637Display.cpp:201:6:void TM1637Display::showNumberHexEx(uint16_t, digitPosition)	40	static
-TM1637Display.cpp:206:6:void TM1637Display::showNumberHexEx(uint16_t, digitPosition, twoDots, leadingZero, numLength)	40	static
+TM1637Display.cpp:179:6:void TM1637Display::write(int, digitPosition)	40	static
+TM1637Display.cpp:184:6:void TM1637Display::write(int, digitPosition, leadingZero, numLength)	40	static
+TM1637Display.cpp:190:6:void TM1637Display::writeWithDots(int, digitPosition)	56	static
+TM1637Display.cpp:195:6:void TM1637Display::writeWithDots(int, digitPosition, twoDots, leadingZero, numLength)	48	static
+TM1637Display.cpp:201:6:void TM1637Display::writeHexadecimal(uint16_t, digitPosition)	40	static
+TM1637Display.cpp:206:6:void TM1637Display::writeHexadecimal(uint16_t, digitPosition, twoDots, leadingZero, numLength)	40	static
 TM1637Display.cpp:212:6:void TM1637Display::showNumberBaseEx(int8_t, uint16_t, twoDots, leadingZero, numLength, digitPosition)	40	static
 TM1637Display.cpp:257:6:void TM1637Display::fastDelay()	24	static
 TM1637Display.cpp:266:6:void TM1637Display::start()	16	static

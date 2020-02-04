@@ -157,10 +157,10 @@ void TM1637Display::clear()
 
 void TM1637Display::ligthSegments()
 {
-	showNumberDecEx(8,fourth,showDots,hide,one);
-	showNumberDecEx(8,third,showDots,hide,one);
-	showNumberDecEx(8,second,showDots,hide,one);
-	showNumberDecEx(8,first,showDots,hide,one);
+	writeWithDots(8,fourth,showDots,hide,one);
+	writeWithDots(8,third,showDots,hide,one);
+	writeWithDots(8,second,showDots,hide,one);
+	writeWithDots(8,first,showDots,hide,one);
 }
 
 void TM1637Display::setDigitMode(leadingZero _digitMode) {
@@ -176,34 +176,34 @@ void TM1637Display::setDoubleDots(bool on)
 	dotsMask = on ? showDots : hideDots;
 }
 
-void TM1637Display::showNumberDec(int num, digitPosition pos)
+void TM1637Display::write(int num, digitPosition pos)
 {
-	showNumberDecEx(num, pos, hideDots, digitMode, digitLength);
+	writeWithDots(num, pos, hideDots, digitMode, digitLength);
 }
 
-void TM1637Display::showNumberDec(int num, digitPosition pos,
+void TM1637Display::write(int num, digitPosition pos,
 		leadingZero leading_zero, numLength length)
 {
-	showNumberDecEx(num, pos, dotsMask, leading_zero, length);
+	writeWithDots(num, pos, dotsMask, leading_zero, length);
 }
 
-void TM1637Display::showNumberDecEx(int num, digitPosition pos)
+void TM1637Display::writeWithDots(int num, digitPosition pos)
 {
 	showNumberBaseEx(num < 0? -10 : 10, num < 0? -num : num, dotsMask, digitMode, digitLength, pos);
 }
 
-void TM1637Display::showNumberDecEx(int num, digitPosition pos, twoDots dots, leadingZero leading_zero,
+void TM1637Display::writeWithDots(int num, digitPosition pos, twoDots dots, leadingZero leading_zero,
                                     numLength length)
 {
 	showNumberBaseEx(num < 0? -10 : 10, num < 0? -num : num, dots, leading_zero, length, pos);
 }
 
-void TM1637Display::showNumberHexEx(uint16_t num, digitPosition pos)
+void TM1637Display::writeHexadecimal(uint16_t num, digitPosition pos)
 {
 	showNumberBaseEx(16, num, dotsMask, digitMode, digitLength, pos);
 }
 
-void TM1637Display::showNumberHexEx(uint16_t num, digitPosition pos, twoDots dots, leadingZero leading_zero,
+void TM1637Display::writeHexadecimal(uint16_t num, digitPosition pos, twoDots dots, leadingZero leading_zero,
                                     numLength length)
 {
 	showNumberBaseEx(16, num, dots, leading_zero, length, pos);

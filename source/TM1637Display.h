@@ -191,10 +191,10 @@ public:
  *		   o número passado no argumento em @ref num deve ser entre 0 e 99)
  *	@param pos A posição do dígito mais significativo (0- a esquerda, 3- a direita)
  */
-	void showNumberDec(int num, digitPosition pos);
+	void write(int num, digitPosition pos);
 
 //! @overload
-	void showNumberDec(int num, digitPosition pos, leadingZero leading_zero, numLength length);
+	void write(int num, digitPosition pos, leadingZero leading_zero, numLength length);
 
 /*!
  * Exibe um valor decimal com ponto
@@ -214,10 +214,10 @@ public:
  *		   o número passado no argumento em @ref num deve ser entre 0 e 99)
  *	@param pos A posição do dígito mais significativo (0- a esquerda, 3- a direita)
  */
-	void showNumberDecEx(int num, digitPosition pos);
+	void writeWithDots(int num, digitPosition pos);
 
 //! @overload
-	void showNumberDecEx(int num, digitPosition pos, twoDots dots,
+	void writeWithDots(int num, digitPosition pos, twoDots dots,
 			leadingZero leading_zero,numLength length);
 
 /*!
@@ -238,10 +238,10 @@ public:
  *		   o número passado no argumento em @ref num deve ser entre 0 e 99)
  *	@param pos A posição do dígito mais significativo (0- a esquerda, 3- a direita)
  */
-	void showNumberHexEx(uint16_t num, digitPosition pos);
+	void writeHexadecimal(uint16_t num, digitPosition pos);
 
 //! @overload
-	void showNumberHexEx(uint16_t num, digitPosition pos, twoDots dots,
+	void writeHexadecimal(uint16_t num, digitPosition pos, twoDots dots,
 			leadingZero leading_zero, numLength length);
 
 /*!

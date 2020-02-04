@@ -92,10 +92,10 @@ int main(void) {
     while (1) {
     	int floor = 0;
     	while(floor < 16) {
-    		display.showNumberHexEx(floor, first);
-    		display.showNumberHexEx(floor, second);
-    		display.showNumberHexEx(floor, third);
-    		display.showNumberHexEx(floor, fourth);
+    		display.writeHexadecimal(floor, first);
+    		display.writeHexadecimal(floor, second);
+    		display.writeHexadecimal(floor, third);
+    		display.writeHexadecimal(floor, fourth);
     		floor++;
 
     	}

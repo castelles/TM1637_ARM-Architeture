@@ -555,15 +555,15 @@ Discarded input sections
                 0x00000000       0x38 ./source/TM1637Display.o
  .text._ZN13TM1637Display13ligthSegmentsEv
                 0x00000000       0x60 ./source/TM1637Display.o
- .text._ZN13TM1637Display13showNumberDecEi13digitPosition
+ .text._ZN13TM1637Display5writeEi13digitPosition
                 0x00000000       0x36 ./source/TM1637Display.o
- .text._ZN13TM1637Display13showNumberDecEi13digitPosition11leadingZero9numLength
+ .text._ZN13TM1637Display5writeEi13digitPosition11leadingZero9numLength
                 0x00000000       0x40 ./source/TM1637Display.o
- .text._ZN13TM1637Display15showNumberDecExEi13digitPosition
+ .text._ZN13TM1637Display13writeWithDotsEi13digitPosition
                 0x00000000       0x58 ./source/TM1637Display.o
- .text._ZN13TM1637Display15showNumberDecExEi13digitPosition7twoDots11leadingZero9numLength
+ .text._ZN13TM1637Display13writeWithDotsEi13digitPosition7twoDots11leadingZero9numLength
                 0x00000000       0x58 ./source/TM1637Display.o
- .text._ZN13TM1637Display15showNumberHexExEt13digitPosition7twoDots11leadingZero9numLength
+ .text._ZN13TM1637Display16writeHexadecimalEt13digitPosition7twoDots11leadingZero9numLength
                 0x00000000       0x50 ./source/TM1637Display.o
  .text._ZNSt8functionIFvvEEaSERKS1_
                 0x00000000       0x36 ./source/TM1637Display.o
@@ -6212,9 +6212,9 @@ END GROUP
  .text._ZN13TM1637Display13setDoubleDotsEb
                 0x00002194       0x2a ./source/TM1637Display.o
                 0x00002194                TM1637Display::setDoubleDots(bool)
- .text._ZN13TM1637Display15showNumberHexExEt13digitPosition
+ .text._ZN13TM1637Display16writeHexadecimalEt13digitPosition
                 0x000021be       0x4c ./source/TM1637Display.o
-                0x000021be                TM1637Display::showNumberHexEx(unsigned short, digitPosition)
+                0x000021be                TM1637Display::writeHexadecimal(unsigned short, digitPosition)
  .text._ZN13TM1637Display16showNumberBaseExEat7twoDots11leadingZero9numLength13digitPosition
                 0x0000220a      0x1a2 ./source/TM1637Display.o
                 0x0000220a                TM1637Display::showNumberBaseEx(signed char, unsigned short, twoDots, leadingZero, numLength, digitPosition)
@@ -6764,30 +6764,30 @@ OUTPUT(TM1637_ARM-Architeture.axf elf32-littlearm)
  .debug_line    0x000086b7      0xf43 ./drivers/fsl_uart.o
  .debug_line    0x000095fa      0x482 ./CMSIS/system_MKL25Z4.o
 
-.debug_str      0x00000000    0x46671
+.debug_str      0x00000000    0x4664e
  .debug_str     0x00000000     0x357f ./startup/startup_mkl25z4.o
                                0x35b4 (size before relaxing)
  .debug_str     0x0000357f     0xefc7 ./source/Callback.o
                               0x12809 (size before relaxing)
- .debug_str     0x00012546    0x28179 ./source/TM1637Display.o
-                              0x3ac22 (size before relaxing)
- .debug_str     0x0003a6bf      0x276 ./source/main.o
-                              0x39868 (size before relaxing)
- .debug_str     0x0003a935      0x209 ./source/mkl_DevGPIO.o
+ .debug_str     0x00012546    0x28156 ./source/TM1637Display.o
+                              0x3ac05 (size before relaxing)
+ .debug_str     0x0003a69c      0x276 ./source/main.o
+                              0x3984b (size before relaxing)
+ .debug_str     0x0003a912      0x209 ./source/mkl_DevGPIO.o
                               0x380ee (size before relaxing)
- .debug_str     0x0003ab3e     0x8504 ./drivers/fsl_common.o
+ .debug_str     0x0003ab1b     0x8504 ./drivers/fsl_common.o
                               0x341e1 (size before relaxing)
- .debug_str     0x00043042      0xe52 ./drivers/fsl_dma.o
+ .debug_str     0x0004301f      0xe52 ./drivers/fsl_dma.o
                               0x33c87 (size before relaxing)
- .debug_str     0x00043e94      0xc28 ./drivers/fsl_i2c.o
+ .debug_str     0x00043e71      0xc28 ./drivers/fsl_i2c.o
                               0x3419e (size before relaxing)
- .debug_str     0x00044abc      0xa57 ./drivers/fsl_lpsci.o
+ .debug_str     0x00044a99      0xa57 ./drivers/fsl_lpsci.o
                               0x33fcc (size before relaxing)
- .debug_str     0x00045513      0x7bd ./drivers/fsl_spi.o
+ .debug_str     0x000454f0      0x7bd ./drivers/fsl_spi.o
                               0x33d8e (size before relaxing)
- .debug_str     0x00045cd0      0x93d ./drivers/fsl_uart.o
+ .debug_str     0x00045cad      0x93d ./drivers/fsl_uart.o
                               0x33fef (size before relaxing)
- .debug_str     0x0004660d       0x64 ./CMSIS/system_MKL25Z4.o
+ .debug_str     0x000465ea       0x64 ./CMSIS/system_MKL25Z4.o
                               0x2f45c (size before relaxing)
 
 .comment        0x00000000       0x76
@@ -7325,8 +7325,8 @@ SystemCoreClockUpdate                             ./CMSIS/system_MKL25Z4.o
 SystemInit                                        ./CMSIS/system_MKL25Z4.o
                                                   ./startup/startup_mkl25z4.o
 TM1637Display::TM1637Display(mkl_DevGPIO, mkl_DevGPIO) ./source/TM1637Display.o
-TM1637Display::TM1637Display(mkl_DevGPIO, mkl_DevGPIO) ./source/TM1637Display.o
                                                   ./source/main.o
+TM1637Display::TM1637Display(mkl_DevGPIO, mkl_DevGPIO) ./source/TM1637Display.o
 TM1637Display::clear()                            ./source/TM1637Display.o
 TM1637Display::encodeDigit(unsigned char)         ./source/TM1637Display.o
 TM1637Display::fastDelay()                        ./source/TM1637Display.o
@@ -7342,17 +7342,17 @@ TM1637Display::setLength(numLength)               ./source/TM1637Display.o
 TM1637Display::setSegments(unsigned char const*, digitPosition) ./source/TM1637Display.o
 TM1637Display::setSegments(unsigned char const*, digitPosition, numLength) ./source/TM1637Display.o
 TM1637Display::showNumberBaseEx(signed char, unsigned short, twoDots, leadingZero, numLength, digitPosition) ./source/TM1637Display.o
-TM1637Display::showNumberDec(int, digitPosition)  ./source/TM1637Display.o
-TM1637Display::showNumberDec(int, digitPosition, leadingZero, numLength) ./source/TM1637Display.o
-TM1637Display::showNumberDecEx(int, digitPosition) ./source/TM1637Display.o
-TM1637Display::showNumberDecEx(int, digitPosition, twoDots, leadingZero, numLength) ./source/TM1637Display.o
-TM1637Display::showNumberHexEx(unsigned short, digitPosition) ./source/TM1637Display.o
-                                                  ./source/main.o
-TM1637Display::showNumberHexEx(unsigned short, digitPosition, twoDots, leadingZero, numLength) ./source/TM1637Display.o
 TM1637Display::start()                            ./source/TM1637Display.o
 TM1637Display::stop()                             ./source/TM1637Display.o
+TM1637Display::write(int, digitPosition)          ./source/TM1637Display.o
+TM1637Display::write(int, digitPosition, leadingZero, numLength) ./source/TM1637Display.o
 TM1637Display::writeByte(unsigned char)           ./source/TM1637Display.o
 TM1637Display::writeDots(unsigned char, unsigned char*) ./source/TM1637Display.o
+TM1637Display::writeHexadecimal(unsigned short, digitPosition) ./source/TM1637Display.o
+                                                  ./source/main.o
+TM1637Display::writeHexadecimal(unsigned short, digitPosition, twoDots, leadingZero, numLength) ./source/TM1637Display.o
+TM1637Display::writeWithDots(int, digitPosition)  ./source/TM1637Display.o
+TM1637Display::writeWithDots(int, digitPosition, twoDots, leadingZero, numLength) ./source/TM1637Display.o
 TM1637Display::~TM1637Display()                   ./source/main.o
 TM1637Display::~TM1637Display()                   ./source/main.o
 TPM0_DriverIRQHandler                             ./startup/startup_mkl25z4.o
@@ -7502,9 +7502,9 @@ __cxxabiv1::__class_type_info::__do_upcast(__cxxabiv1::__class_type_info const*,
 __cxxabiv1::__class_type_info::__do_upcast(__cxxabiv1::__class_type_info const*, void**) const c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(class_type_info.o)
                                                   c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(si_class_type_info.o)
 __cxxabiv1::__class_type_info::~__class_type_info() c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(class_type_info.o)
+__cxxabiv1::__class_type_info::~__class_type_info() c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(class_type_info.o)
+__cxxabiv1::__class_type_info::~__class_type_info() c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(class_type_info.o)
                                                   c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(si_class_type_info.o)
-__cxxabiv1::__class_type_info::~__class_type_info() c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(class_type_info.o)
-__cxxabiv1::__class_type_info::~__class_type_info() c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(class_type_info.o)
 __cxxabiv1::__forced_unwind::~__forced_unwind()   c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(eh_exception.o)
 __cxxabiv1::__forced_unwind::~__forced_unwind()   c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(eh_exception.o)
 __cxxabiv1::__forced_unwind::~__forced_unwind()   c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(eh_exception.o)
@@ -7906,8 +7906,8 @@ std::enable_if<std::__and_<std::__not_<std::__is_tuple_like<void (*)(std::_Any_d
 std::exception::what() const                      c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(eh_exception.o)
 std::exception::~exception()                      c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(eh_exception.o)
 std::exception::~exception()                      c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(eh_exception.o)
-std::exception::~exception()                      c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(eh_exception.o)
                                                   c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(functional.o)
+std::exception::~exception()                      c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(eh_exception.o)
 std::function<void ()>::function()                ./source/mkl_DevGPIO.o
 std::function<void ()>::function()                ./source/mkl_DevGPIO.o
 std::function<void ()>::function(std::function<void ()> const&) ./source/Callback.o
@@ -7957,8 +7957,8 @@ std::type_info::operator==(std::type_info const&) const c:/nxp/mcuxpressoide_11.
                                                   c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(si_class_type_info.o)
 std::type_info::~type_info()                      c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(tinfo.o)
 std::type_info::~type_info()                      c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(tinfo.o)
-                                                  c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(class_type_info.o)
 std::type_info::~type_info()                      c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(tinfo.o)
+                                                  c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(class_type_info.o)
 std::unexpected()                                 c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(eh_terminate.o)
 strcmp                                            c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc_nano.a(lib_a-strcmp.o)
                                                   c:/nxp/mcuxpressoide_11.1.0_3209/ide/plugins/com.nxp.mcuxpresso.tools.win32_11.1.0.201909161352/tools/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libstdc++_nano.a(tinfo.o)
